@@ -8,7 +8,7 @@ use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Validator\Constraints as Assert;
-use APP\Entity\Traits\Timestampable;
+use App\Entity\Traits\Timestampable;
 
    
 #[ORM\Entity(repositoryClass: RecipeRepository::class)]
@@ -50,6 +50,10 @@ class Recipe
 
     #[ORM\Column(length: 500, nullable: true)]
     private ?string $imageName = "https://upload.wikimedia.org/wikipedia/commons/thumb/d/da/Imagen_no_disponible.svg/600px-Imagen_no_disponible.svg.png";
+
+    #[ORM\ManyToOne(inversedBy: 'recipes')]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?User $user = null;
 
     public function getId(): ?int
     {
@@ -113,6 +117,18 @@ class Recipe
     public function setImageName(?string $imageName): static
     {
         $this->imageName = $imageName;
+
+        return $this;
+    }
+
+    public function getUser(): ?User
+    {
+        return $this->user;
+    }
+
+    public function setUser(?User $user): static
+    {
+        $this->user = $user;
 
         return $this;
     }
