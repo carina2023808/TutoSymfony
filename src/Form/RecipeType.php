@@ -31,6 +31,7 @@ class RecipeType extends AbstractType
             ->add('duration')
             ->add('save', SubmitType::class, [
                 'label' => 'Envoyer',
+                
             ])
              
          ->addEventListener(FormEvents::PRE_SUBMIT, $this->autoSlug(...))

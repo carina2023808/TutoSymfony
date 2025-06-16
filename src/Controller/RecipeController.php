@@ -158,13 +158,14 @@ final class RecipeController extends AbstractController
         return $this->render('recipe/show.html.twig', [
             // 'slug' => $slug,
             // 'id' => $id,
-            'recipe' => $recipe, //recipe eo o que vai aparecer na pagina par default caso o 1° nao seja passado
+            'recipe' => $recipe //recipe eo o que vai aparecer na pagina par default caso o 1° nao seja passado
 
-            'user' => [
-                'firstname' => 'Carina',
-                'lastname' => 'JC',
-            ]
+            // 'user' => [
+            //     'firstname' => 'Carina',
+            //     'lastname' => 'JC',
+            // ]
 
+    // 'user' => $recipe->getUser()    
 
         ]);
 
