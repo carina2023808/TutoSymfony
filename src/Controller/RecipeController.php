@@ -214,6 +214,7 @@ public function creat (Request $request , EntityManagerInterface $em): Response 
     $form->handleRequest($request);
     if ($form->isSubmitted()&& $form->isValid()){//verifica se o formulario foi submetido e se e valido 
         //respeitando as regras do RecipeType dentro de $builder
+        
         $recipe->setCreatedAt(new DateTimeImmutable())
                 ->setUpdatedAt(new DateTimeImmutable());
      $em->persist($recipe);
