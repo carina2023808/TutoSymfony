@@ -24,12 +24,10 @@ class Recipe
     private ?int $id = null;
 
     #[ORM\Column(length: 255, unique: true)]//unique Add the unique constraint na base de donner 
-    #[Assert\NotBlank(message: 'Le titre ne peut pas être vide.')]
+    #[Assert\NotBlank()]
     #[Assert\Length(
     min:10,
-    max:50,
-    minMessage: 'Le titre doit comporter au moins 10 caractères.',
-    maxMessage: 'Le titre ne peut pas dépasser 50 caractères.',)]
+    max:50, )]
     // #[Assert\NotEqualTo("Merde",message: "Vous ne pouvez pas utiliser le mot grossier(M****)")]
     #[InappropriateWords()] // Add the InappropriateWords constraint
     private ?string $title = null;
@@ -38,14 +36,14 @@ class Recipe
     private ?string $slug = null;
 
     #[ORM\Column(type: Types::TEXT)]
-    #[Assert\NotBlank(message: 'Le contenu ne peut pas etre vide.')]
-    #[Assert\Length(min: 20, minMessage: 'Le contenu doit comporter au moins 20 caractères.')]
+    #[Assert\NotBlank()]
+    #[Assert\Length()]
     private ?string $content = null;
     use Timestampable;
    
     #[ORM\Column(nullable: true)]
-    #[Assert\Positive(message: 'La durée doit être un nombre positif.')]
-    #[Assert\LessThan(1440, message: 'La durée ne peut pas dépasser une durée de 24 heures.')]
+    #[Assert\Positive()]
+    #[Assert\LessThan()]
     private ?int $duration = null;
 
     #[ORM\Column(length: 500, nullable: true)]
