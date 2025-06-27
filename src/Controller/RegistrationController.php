@@ -26,6 +26,11 @@ class RegistrationController extends AbstractController
     #[Route('/register', name: 'app_register')]
     public function register(Request $request, UserPasswordHasherInterface $userPasswordHasher, EntityManagerInterface $entityManager): Response
     {
+        if($this->getUser()) {
+            $this->addFlash('error', 'You are already logged in!');
+            // If the user is already logged in, redirect to the account page
+            return $this->redirectToRoute('app_account');
+        }
         $user = new User();
         
         
@@ -54,7 +59,7 @@ class RegistrationController extends AbstractController
             );
 
             // do anything else you need here, like send an email
-
+             $this->addFlash('info', 'Go to your email to verify your account!');
             return $this->redirectToRoute('app_login');
         }
 
@@ -82,6 +87,6 @@ class RegistrationController extends AbstractController
         // @TODO Change the redirect on success and handle or remove the flash message in your templates
         $this->addFlash('success', 'Your email address has been verified.');
 
-        return $this->redirectToRoute('app_register');
+        return $this->redirectToRoute('app_recipe_index');
     }
 }

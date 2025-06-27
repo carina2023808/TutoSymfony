@@ -37,13 +37,13 @@ class Recipe
 
     #[ORM\Column(type: Types::TEXT)]
     #[Assert\NotBlank()]
-    #[Assert\Length()]
+    #[Assert\Length(min:20)]
     private ?string $content = null;
     use Timestampable;
    
     #[ORM\Column(nullable: true)]
     #[Assert\Positive()]
-    #[Assert\LessThan()]
+    #[Assert\LessThan(value: 1440)]
     private ?int $duration = null;
 
     #[ORM\Column(length: 500, nullable: true)]

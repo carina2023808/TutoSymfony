@@ -23,14 +23,15 @@
         </form>
        #}
         {# Version plus simple sans formulaire pour le delete #}
-        <a class="btn btn-primary btn-sm" href={{ path('app_recipe_edit', {id: recipe.id}) }}>Edit Recipe</a>
-        <a class= "btn btn-danger btn-sm" href={{ path('app_recipe_delete', {id: recipe.id}) }} onclick="return confirm('Are you sure you want to delete this recipe?')">Delete</a>
+    {% if app.user %}
+    {% if app.user.isVerified() and app.user.email == recipe.user.email %}
+        <a class="btn btn-primary btn-sm" href="{{ path('app_recipe_edit', {id: recipe.id}) }}">Edit Recipe</a>
+        <a class="btn btn-danger btn-sm" href="{{ path('app_recipe_delete', {id: recipe.id}) }}" onclick="return confirm('Are you sure you want to delete this recipe?')">Delete</a>
+    {% endif %}
+    {% endif %}
+
+       
         <a class="btn btn-secondary btn-sm" href={{ path('app_recipe_index') }}>Go Back</a>
-
-
-
-
-
 {# <p>Recette créée par {{ user.firstname ~" "~ user.lastname }}</p> #}
 {# {{ dump(user) }} #}
 {# {{ dump(app.current_route) }} #}

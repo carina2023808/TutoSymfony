@@ -13,6 +13,7 @@ navBar.logout: 'Se Déconnecter'
 
 
 registrationForm:
+  title: "Inscription"
   firstname: Prénom
   lastname: Nom
   email: Email
