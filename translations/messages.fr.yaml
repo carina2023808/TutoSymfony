@@ -10,14 +10,15 @@ navBar.login: 'Se connecter'
 navBar.addRecipe: 'Ajouter une Recette'
 navBar.account: 'Mon compte'
 navBar.logout: 'Se Déconnecter'
-
-
-registrationForm:
-  title: "Inscription"
-  firstname: Prénom
-  lastname: Nom
-  email: Email
-  password: 'Mot de Passe'
-  agreeTerms: "J'accepte les termes et conditions"
-
+registrationForm.title: Inscription
+registrationForm.firstname: Prénom
+registrationForm.lastname: Nom
+registrationForm.email: Email
+registrationForm.password: 'Mot de Passe'
+registrationForm.agreeTerms: "J'accepte les termes et conditions"
 enregisterTempletButton: "S'enregistrer"
+recipeContoller.emailNotVerified: 'Vous devez vérifier votre compte avant de créer des recettes!'
+recipeContoller.edit.userRecipe1: 'Vous devez être'
+recipeContoller.edit.userRecipe2: 'pour modifier cette recette!'
+recipeContoller.edit.mustLogin: 'Vous devez vous connecter pour modifier une recette!'
+
