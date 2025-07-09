@@ -151,3 +151,6 @@ Error: Erreur
 'There is already an account with this email': '__There is already an account with this email'
 user.emailUnique: 'Un compte existe déjà avec cette adresse email.'
 registrationForm.agreeTerms.agreeTerms.isTrue: 'Vous devez accepter nos termes.'
+'Please enter a password': '__Please enter a password'
+'Your password should be at least {{ limit }} characters': '__Your password should be at least {{ limit }} characters'
+'Please enter your email': '__Please enter your email'

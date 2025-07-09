@@ -7,7 +7,8 @@
         <article>
             <h1> {{ recipe.title |title }}</h1>
             <br>
-            <img style="max-width: 400px;" src={{recipe.imageName}}>
+             <img style=" width="300" height="300";" src={{vich_uploader_asset(recipe, 'imageFile') }}>
+                
             {# <p>Recette créée par {{ user.firstname }} {{ user.lastname }}</p> #}
             <br>
             <h5>{{ recipe.content | nl2br }}</h5>
@@ -23,6 +24,7 @@
         </form>
        #}
         {# Version plus simple sans formulaire pour le delete #}
+   
     {% if app.user %}
     {% if app.user.isVerified() and app.user.email == recipe.user.email %}
         <a class="btn btn-primary btn-sm" href="{{ path('app_recipe_edit', {id: recipe.id}) }}">Edit Recipe</a>

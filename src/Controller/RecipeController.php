@@ -4,15 +4,19 @@ namespace App\Controller;
 
 use App\Entity\Recipe;
 use App\Form\RecipeType;
+use App\Form\SearchType;
+use App\Model\SearchData;
 use App\Repository\RecipeRepository;
 use DateTimeImmutable;
 use Doctrine\ORM\EntityManagerInterface;
 use Dom\Entity;
+use Knp\Component\Pager\PaginatorInterface;
 use PHPUnit\Util\Json;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
-use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
+
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
@@ -20,8 +24,15 @@ final class RecipeController extends AbstractController
 {
     #[Route(path: "/recette", name: "app_recipe_index")]
 
-    public function index(Request $request, RecipeRepository $repository, EntityManagerInterface $em, TranslatorInterface $translator): Response
-    {
+    public function index(Request $request, RecipeRepository $repository, EntityManagerInterface $em,
+     TranslatorInterface $translator, PaginatorInterface $paginatorInterface): Response
+     {$searchData = new SearchData();
+        $form = $this->createForm(SearchType::class, $searchData);
+        
+        $form->handleRequest($request);
+        if($form->isSubmitted() && $form->isValid()){
+            dd($searchData);
+        }
         
         if ($this->getUser()) {
             /** 
@@ -46,7 +57,11 @@ final class RecipeController extends AbstractController
         //    $em->flush(); /*gravar a receita no banco de dados*/
 
         // return new Response("Bienvenue sur la page des recettes");
-        $recipes = $repository->findAll();
+        $data = $repository->findAll();
+         $recipes=$paginatorInterface->paginate(
+            $data,
+            $request->query->getInt('page', 1),9
+         );
         //  $recipes = $repository->findRecipeDurationLowerThan(20);  /*esse e a chamada do methode*/
         // dump($recipes);
 

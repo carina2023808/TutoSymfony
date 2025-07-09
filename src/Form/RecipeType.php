@@ -15,6 +15,12 @@ use Symfony\Component\Form\FormEvents;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\String\Slugger\AsciiSlugger;
 use Symfony\Component\Validator\Constraints\Length;
+use Vich\UploaderBundle\Form\Type\VichFileType;
+use Vich\UploaderBundle\Form\Type\VichImageType;
+
+
+
+
 
 class RecipeType extends AbstractType
 {
@@ -30,9 +36,9 @@ class RecipeType extends AbstractType
             ->add('content', TextareaType::class,[
                 'label' => 'recipeForm.content',
             ])
-            ->add('imageName', TextType::class,[
-                'label' => 'recipeForm.imageName',
-            ])
+            // ->add('imageName', TextType::class,[
+            //     'label' => 'recipeForm.imageName',
+            // ])
             ->add('duration', NumberType::class,[
                 'label' => 'recipeForm.duration',
             ])
@@ -40,6 +46,16 @@ class RecipeType extends AbstractType
                 'label' => 'recipeForm.save',
                 
             ])
+            ->add('imageFile', VichImageType::class, [
+             'required' => false,
+            'allow_delete' => true,
+            'delete_label' => 'Delete recipe image',
+            'download_uri' => true,
+            'image_uri' => true,
+            'asset_helper' => true,
+            'imagine_pattern' => 'avatar_thumbnail'
+])
+            
              
          ->addEventListener(FormEvents::PRE_SUBMIT, $this->autoSlug(...))
          ;
