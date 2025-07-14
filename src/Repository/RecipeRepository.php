@@ -3,15 +3,19 @@
 namespace App\Repository;
 
 use App\Entity\Recipe;
+use App\Model\SearchData;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\ORM\Query;
 use Doctrine\Persistence\ManagerRegistry;
+use Knp\Component\Pager\Pagination\PaginationInterface;
+use Knp\Component\Pager\PaginatorInterface;
 
 /**
  * @extends ServiceEntityRepository<Recipe>
  */
 class RecipeRepository extends ServiceEntityRepository
 {
-    public function __construct(ManagerRegistry $registry)
+    public function __construct(ManagerRegistry $registry, private PaginatorInterface $paginatorInterface)
     {
         parent::__construct($registry, Recipe::class);
     }
@@ -33,14 +37,28 @@ class RecipeRepository extends ServiceEntityRepository
            ;
        }
 
-    //    public function findOneBySomeField($value): ?Recipe
-    //    {
-    //        return $this->createQueryBuilder('r')
-    //            ->andWhere('r.exampleField = :val')
-    //            ->setParameter('val', $value)
-    //            ->getQuery()
-    //            ->getOneOrNullResult()
-    //        ;
-    //    }
+       public function findBySeach(SearchData $searchData): PaginationInterface
+       {
+
+        $data =$this->createQueryBuilder('r')
+        ->addOrderBy('r.createdAt', 'DESC');
+
+        if (!empty($searchData->q))
+            {
+            $data = $data
+                ->andWhere('r.title LIKE :q')
+               ->setParameter('q', "%{$searchData->q}%");
+
+        }
+
+        $data= $data
+        ->getQuery()
+        ->getResult();
+
+        $recipes= $this->paginatorInterface->paginate($data, $searchData->page,9);
+
+          return $recipes;
+              
+       }
   
 }

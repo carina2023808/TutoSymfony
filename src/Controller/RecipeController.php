@@ -24,23 +24,29 @@ final class RecipeController extends AbstractController
 {
     #[Route(path: "/recette", name: "app_recipe_index")]
 
-    public function index(Request $request, RecipeRepository $repository, EntityManagerInterface $em,
-     TranslatorInterface $translator, PaginatorInterface $paginatorInterface): Response
-     {$searchData = new SearchData();
+    public function index(
+        Request $request,
+        RecipeRepository $repository,
+        EntityManagerInterface $em,
+        TranslatorInterface $translator,
+        PaginatorInterface $paginatorInterface
+    ): Response {
+        $searchData = new SearchData();
         $form = $this->createForm(SearchType::class, $searchData);
-        
+
         $form->handleRequest($request);
-        if($form->isSubmitted() && $form->isValid()){
-            dd($searchData);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            // dd($searchData);
         }
-        
+
         if ($this->getUser()) {
             /** 
              *@var User
              */
             $user = $this->getUser();
             if (!$user->isVerified()) {
-                $this->addFlash('info',$translator->trans ('recipeContoller.emailNotVerified'));
+                $this->addFlash('info', $translator->trans('recipeContoller.emailNotVerified'));
             }
         }
         // return new Response("Bienvenue sur la page des recettes");
@@ -58,103 +64,35 @@ final class RecipeController extends AbstractController
 
         // return new Response("Bienvenue sur la page des recettes");
         $data = $repository->findAll();
-         $recipes=$paginatorInterface->paginate(
+        $recipeTotal = sizeof($data);
+        $recipes = $paginatorInterface->paginate(
             $data,
-            $request->query->getInt('page', 1),9
-         );
-        //  $recipes = $repository->findRecipeDurationLowerThan(20);  /*esse e a chamada do methode*/
-        // dump($recipes);
+            $request->query->getInt('page', 1),
+            6
+        );
+  // barra de recherch 
+        $searchData = new SearchData();
+        $form = $this->createForm(SearchType::class, $searchData);
+        $form->handleRequest($request);
+        if ($form->isSubmitted() && $form->isValid()) {
+            $searchData->page = $request->query->getInt('page', 1);
+        
+            $recipes = $repository->findBySeach($searchData);
+            $recipeTotal = sizeof($recipes);
 
-
-
-        // modificar o titro da receita
-        // o numero 3 e o index  da receita nao o id  que eu quero alterar
-        // $recipes[3]->setTitle("Omelette "); 
-        // $em->flush();
-
-        //supressao de uma receita
-        // $em->remove($recipes[3]);
-        // $em->flush();
-
-
-        //comment récuperer nos recettes sans appeler le RecipeRepository
-        // $recipes = $em->getRepository(Recipe::class)->findAll();
-
-        //exo 12
-        // $recipe = new Recipe(); /*instanciar a classe Recipe*/
-        // $recipe->setTitle("Tartelettes au riz")
-        //     ->setSlug("tartelettes-au-riz")
-        //     ->setContent("Préchauffez le four à 180 °C.
-
-        //                  Battez les œufs avec le sucre. Ajoutez la farine et le riz au lait, et mélangez.
-
-        //                 Déroulez la pâte brisée et coupez-la en 4, ainsi que la feuille de papier cuisson, et disposez-les dans des moules à tartelette et répartissez le mélange au riz au lait dans les moules et glissez 30 min au four préchauffé.
-
-        //                 Sortez les tartelettes du four et laissez-les refroidir.
-
-        //                 Garnissez les tartelettes de pâte à tartiner Amande-pistache, de framboises et de pistaches.'")
-        // ->setDuration(60)
-        // ->setCreatedAt(new DateTimeImmutable())
-        // ->setUpdatedAt(new DateTimeImmutable());
-        // $em->persist($recipe); /*persistir a receita*/
-        // $em->flush(); /*gravar a receita no banco de dados*/
-
-        // $recipe = new Recipe(); /*instanciar a classe Recipe*/
-        // $recipe->setTitle("Braisade de saumon")
-        //     ->setSlug("omelette")
-        //     ->setContent("1-Lavez soigneusement les grenailles non pelées sous l’eau froide. Faites-les cuire 20 min dans de l’eau bouillante légèrement salée. Égouttez-les et passez-les sous l’eau froide. Égouttez-les et coupez-les en 2.
-
-        //                 2-Entre-temps, coupez les extrémités des haricots. Faites cuire ces derniers dans de l’eau bouillante légèrement salée 6 à 7 min. Égouttez-les et passez-les sous l’eau froide pour conserver leur belle couleur verte.
-
-        //                 3-Détaillez l’oignon rouge et les concombres en fines rondelles. Mélangez le tout avec la roquette, les haricots verts et les grenailles.
-
-        //                 4-Ciselez l’aneth. Mélangez-en la moitié avec à la crème, la moutarde et le miel. Salez et poivrez.
-
-        //                 5-Préparation au barbecue (20 min)
-        //                 6-Faites cuire les braisades de saumon et les broccolinis 3 à 4 min de chaque côté sur un barbecue à feu modéré.
-
-        //                 7-Servez les braisades de saumon avec la salade de grenailles et les broccolinis. Garnissez avec les amandes effilées grillées et du reste de l’aneth. Servez le dressing à part.'")
-        //     ->setDuration(25)
-        //     ->setCreatedAt(new DateTimeImmutable())
-        //     ->setUpdatedAt(new DateTimeImmutable());
-        //    $em->persist($recipe); /*persistir a receita*/
-        //    $em->flush(); /*gravar a receita no banco de dados*/
-
-        // $recipes[4]->setTitle(" Taboulé au lard")
-        //     ->setSlug("taboule-au-lard")
-        //     ->setContent(" 1-Faites cuire le boulgour dans de l’eau bouillante légèrement salée (voir temps de cuisson sur l’emballage). Égouttez, ajoutez les mendiants et laissez refroidir.
-
-        //                 2-Entre-temps, coupez le poivron pointu en 2 dans le sens de la longueur et retirez les graines et les filaments blancs. Détaillez le reste, ainsi que la feta, en dés. Effeuillez les branches de thym et ciselez les feuilles.
-
-        //                 3-Épluchez les asperges de la tête vers le pied et coupez l’extrémité dure.
-
-        //                 4-Disposez le boulgour froid dans un grand bol et intégrez-y délicatement le poivron pointu et quelques feuilles de thym.
-
-        //                 5-Extrayez la chair des fruits de la passion et mélangez-la avec le miel, le thym et 2/3 de l’huile d’olive. Salez et poivrez.
-
-
-        //                 6-Badigeonnez les asperges blanches avec le reste de l’huile d’olive. Parsemez de poivre et d’un peu de thym. Faites-les griller 5 à 6 min sur un barbecue à feu modéré. Retournez-les régulièrement.
-
-        //                 7-Faites griller les tranches de lard 3 à 4 min de chaque côté sur le barbecue.
-
-        //                 8-Coupez le lard en lanières d’1 cm et les asperges grillées en 2, de biais. Répartissez le taboulé dans les assiettes et disposez les asperges grillées, les dés de feta et le lard par-dessus. Garnissez de dressing au fruit de la passion et de thym restant.")
-        //     ->setDuration(30)
-        //     ->setCreatedAt(new DateTimeImmutable())
-        //     ->setUpdatedAt(new DateTimeImmutable());
-        // $em->flush();
-
-
-        //exo14
-        //   $em->remove($recipes[4]);
-        //        $em->flush();
-
-
-
-        // $recipes[5]->setSlug("braisade-de-saumon");
-        //  $em->flush();
+            return $this->render('recipe/index.html.twig', [
+                'form' => $form,
+                'recipes' => $recipes,
+                'recipeTotal'=>$recipeTotal,
+               ]);
+        }
 
         return $this->render('recipe/index.html.twig', [
-            'recipes' => $recipes
+            'form' => $form->createView(),
+            'recipes' => $recipes,
+            'recipeTotal' => $recipeTotal,
+
+
         ]);
     }
     //slug(un caractere) eo o que vai aparecer na url
@@ -222,11 +160,11 @@ final class RecipeController extends AbstractController
              */
             $user = $this->getUser();
             if (!$user->isVerified()) {
-                       $this->addFlash('info',$translator->trans ('recipeContoller.edit.confirmEmail'));
+                $this->addFlash('info', $translator->trans('recipeContoller.edit.confirmEmail'));
                 return $this->redirectToRoute('app_recipe_index');
             }
             if ($user->getEmail() !== $recipe->getUser()->getEmail()) {
-                $this->addFlash("error", $translator->trans("recipeController.edit.userRecipe1"). $recipe->getUser()->getEmail() . $translator->trans("recipeController.edit.userRecipe2"));
+                $this->addFlash("error", $translator->trans("recipeController.edit.userRecipe1") . $recipe->getUser()->getEmail() . $translator->trans("recipeController.edit.userRecipe2"));
                 return $this->redirectToRoute('app_recipe_index');
             }
         } else {
@@ -255,7 +193,7 @@ final class RecipeController extends AbstractController
         ]);
     }
     #[Route(path: '/recette/create', name: 'app_recipe_create')]
-    public function creat(Request $request, EntityManagerInterface $em , TranslatorInterface $translator): Response
+    public function creat(Request $request, EntityManagerInterface $em, TranslatorInterface $translator): Response
     {
         if ($this->getUser()) {
             /** 
@@ -291,7 +229,7 @@ final class RecipeController extends AbstractController
         ]);
     }
     #[Route(path: '/recette/{id}/delete', name: 'app_recipe_delete')]
-    public function delete(Recipe $recipe, EntityManagerInterface $em ): Response
+    public function delete(Recipe $recipe, EntityManagerInterface $em): Response
     {
         if ($this->getUser()) {
             /**

@@ -6,6 +6,7 @@
     <div  align = "center" class= "col-md-6 mx-auto ">
         <article>
             <h1> {{ recipe.title |title }}</h1>
+            {% include " recipe/_search_data.html.twig" with {form: form} only  %}
             <br>
              <img style=" width="300" height="300";" src={{vich_uploader_asset(recipe, 'imageFile') }}>
                 
